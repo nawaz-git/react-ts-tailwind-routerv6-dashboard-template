@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser, faFolder, faInbox, faCog, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { NavLink, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+    const location = useLocation();
+
     const sidebarItems = [
-        { label: 'Dashboard', icon: faHome },
+        { label: 'Dashboard', icon: faHome, path: '' },
         { label: 'Team', icon: faUser },
         {
             label: 'Projects',
             icon: faFolder,
+            path: 'projects',
             childrens: [
                 { label: 'Client', icon: faUser },
             ]
@@ -20,7 +24,10 @@ const Sidebar = () => {
                 { label: 'Draft', icon: faInbox },
             ]
         },
-        { label: 'Settings', icon: faCog },
+        {
+            label: 'Settings',
+            icon: faCog
+        },
     ];
 
     const [showChildrenStates, setShowChildrenStates] = useState<{ [key: string]: boolean }>({});
@@ -39,26 +46,34 @@ const Sidebar = () => {
             </div>
             {sidebarItems.map((item, index) => (
                 <div key={index}>
-                    <div
-                        className='my-3 mx-4 cursor-pointer px-4 py-3 hover:border-slate-50 border-2 border-slate-100 hover:bg-slate-50 hover:text-slate-700 rounded-md font-medium text-sm flex flex-row'
-                        onClick={() => {
-                            if (item.childrens) {
-                                toggleChildrenVisibility(item.label)
-                            }
-                        }}
+                    <NavLink
+                        to={`/${item.path ? item.path : ''}`}
                     >
-                        <div>
-                            <FontAwesomeIcon icon={item.icon} color="grey" className="mr-3" />
-                            {item.label}
+                        <div
+                            className={`my-3 mx-4 cursor-pointer px-4 py-3
+                            hover:border-slate-50 border-2 border-slate-100 hover:bg-slate-50 hover:text-slate-700
+                             rounded-md font-medium text-sm flex flex-row
+                            ${location.pathname === `/${item.path}` ? 'bg-slate-100' : ''}
+                             `}
+                            onClick={() => {
+                                if (item.childrens) {
+                                    toggleChildrenVisibility(item.label)
+                                }
+                            }}
+                        >
+                            <div>
+                                <FontAwesomeIcon icon={item.icon} color="grey" className="mr-3" />
+                                {item.label}
+                            </div>
+                            {item.childrens && (
+                                <FontAwesomeIcon
+                                    icon={showChildrenStates[item.label] ? faCaretUp : faCaretDown}
+                                    className="ml-auto self-center"
+                                    color="grey"
+                                />
+                            )}
                         </div>
-                        {item.childrens && (
-                            <FontAwesomeIcon
-                                icon={showChildrenStates[item.label] ? faCaretUp : faCaretDown}
-                                className="ml-auto self-center"
-                                color="grey"
-                            />
-                        )}
-                    </div>
+                    </NavLink>
                     {
                         item.childrens && showChildrenStates[item.label] && item.childrens.map((citem) => (
                             <div
