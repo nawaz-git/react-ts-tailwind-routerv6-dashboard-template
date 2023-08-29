@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Login from '../components/Login';
 import Projects from '../components/Projects';
 import Protected from './Protected';
+import Layout from '../Layout/Layout';
 import Dashboard from '../components/Dashboard';
 
 const RoutesView: React.FC = () => {
@@ -9,14 +10,16 @@ const RoutesView: React.FC = () => {
         '/login': <Login />,
         '/': (
             <Protected>
-                <Dashboard />
+                <Layout>
+                    <Dashboard />
+                </Layout>
             </Protected>
         ),
         '/projects': (
             <Protected>
-                <Dashboard>
+                <Layout>
                     <Projects />
-                </Dashboard>
+                </Layout>
             </Protected>
         ),
     };
