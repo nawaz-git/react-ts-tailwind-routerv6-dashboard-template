@@ -2,9 +2,12 @@ import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser, faFolder, faInbox, faCog, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux'
+import { Utils } from "../models/Utils";
 
 const Sidebar = () => {
     const location = useLocation();
+    const sideBarStatus = useSelector((state: Utils) => state.utils.sideBarStatus)
 
     const sidebarItems = [
         { label: 'Dashboard', icon: faHome, path: '' },
@@ -40,6 +43,7 @@ const Sidebar = () => {
     };
 
     return (
+        sideBarStatus &&
         <div className='w-1/5 border-r max-mobile:min-w-[75%] max-tablet:min-w-[40%] max-laptop:w-1/3'>
             <div className='px-6 py-4 bg-slate-100'>
                 LOGO
